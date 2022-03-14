@@ -112,30 +112,66 @@ history = model.fit(partial_x_train,
 
 
 #Формирование графиков потерь на этапах обучения и проверки
-import matplotlib.pyplot as plt
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-epochs = range(1, len(loss) + 1)
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.title('Training and validation loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-plt.show()
+#для дальнейшей работы (после выбора кол-ва эпох) не нужны
+#import matplotlib.pyplot as plt
+#loss = history.history['loss']
+#val_loss = history.history['val_loss']
+#epochs = range(1, len(loss) + 1)
+#plt.plot(epochs, loss, 'bo', label='Training loss')
+#plt.plot(epochs, val_loss, 'b', label='Validation loss')
+#plt.title('Training and validation loss')
+#plt.xlabel('Epochs')
+#plt.ylabel('Loss')
+#plt.legend()
+#plt.show()
 
 
 #Формирование графиков точности на этапах обучения и проверки
-plt.clf() #Очистить рисунок
-acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Accuracy')
-plt.legend()
-plt.show()
+#plt.clf() #Очистить рисунок
+#acc = history.history['accuracy']
+#val_acc = history.history['val_accuracy']
+#plt.plot(epochs, acc, 'bo', label='Training acc')
+#plt.plot(epochs, val_acc, 'b', label='Validation acc')
+#plt.title('Training and validation accuracy')
+#plt.xlabel('Epochs')
+#plt.ylabel('Accuracy')
+#plt.legend()
+#plt.show()
 
 results = model.evaluate(x_test, one_hot_test_labels)
 print(results)
+
+
+
+#Получение предсказаний для новых данных
+predictions = model.predict(x_test)
+#Каждый элемент в predictions — это вектор с длиной 46:
+#print(predictions[0].shape)
+#>>(46,)
+
+#Сумма коэффициентов этого вектора равна 1:
+#print(np.sum(predictions[0]))
+#>>1.0000001
+
+#Наибольший элемент, элемент с наибольшей вероятностью, — это предсказанный 
+#класс:
+#print(np.argmax(predictions[0]))
+#>>3 (должно быть 4)
+
+
+
+#Выше упоминалось, что метки также можно было бы преобразовать в тензор целых 
+#чисел, как показано ниже:
+#y_train = np.array(train_labels)
+#y_test = np.array(test_labels)
+#Единственное, что изменилось в данном случае, — функция потерь. В листинге 3.21 
+#использовалась функция потерь categorical_crossentropy, предполагающая, что 
+#метки получены методом кодирования категорий. С целочисленными метками 
+#следует использовать функцию sparse_categorical_crossentropy:
+#model.compile(optimizer='rmsprop',
+# loss='sparse_categorical_crossentropy',
+# metrics=['acc'])
+#С математической точки зрения эта новая функция потерь равноценна функции 
+#categorical_crossentropy; ее отличает только интерфейс
+
+
